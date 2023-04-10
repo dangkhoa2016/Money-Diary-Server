@@ -1,0 +1,115 @@
+curl -v 'http://localhost:8080/api/diaries/by_month?date=1675184400000&group_by_date=true&utc_offset=420&sort_field=created_at&sort_direction=asc' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/diaries/report' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --data-raw '[{"name":"Khoảng ngày 1","range":["2023-01-31T17:00:00.000Z","2023-02-28T16:59:59.999Z"]}]' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/diaries/by_date_range?from_date=1672506000000&to_date=1675184399999&utc_offset=420&group_by_date=true&sort_field=created_at&sort_direction=asc' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/generate/categories' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/generate/diaries' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --compressed | json_pp
+
+// invalid form data, required url
+curl -v 'http://localhost:8080/api/categories/import' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --data-raw '[{"range":["2023-01-31T17:00:00.000Z","2023-02-28T16:59:59.999Z"]}]' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/categories' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/diaries/by_date?date=1672506000000' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/categories/by_date?date=1673495915846' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/categories/export' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/diaries/' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --data-raw '{"reason":"reason","money":8000, "category_id":4}' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/diaries/' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --data-raw '{}' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/categories/' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --data-raw '{"name":"reason"}' \
+  --compressed | json_pp
+
+curl -v 'http://localhost:8080/api/diaries/search?from_date=1672506000000&to_date=1675184399999&utc_offset=420&group_by_date=true&sort_field=created_at&sort_direction=asc&category_ids[]=2&category_ids[]=4' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --compressed | json_pp
+
+fetch('https://localhost:8080/api/login',
+{ method: 'post', body: JSON.stringify({ username: 'aa', pass: 'abc' }),
+headers: { "Content-Type": "application/json", }, })
+
+curl -v 'http://localhost:8080/api/login' \
+  -H 'accept: */*' \
+  -H 'authorization: Bearer test' \
+  -H 'content-type: application/json' \
+  -H 'user-agent: Mozilla' \
+  --data-raw '{"username": "xxx", "pass":"x:x"}' \
+  --compressed | json_pp

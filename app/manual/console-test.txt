@@ -1,0 +1,37 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(process.cwd(), '.env.local') });
+let diaries_helpers = null;
+let categories_helpers = null;
+const DiariesHelpers = require('./app/libs/diaries_helpers');
+const CategoriesHelpers = require('./app/libs/categories_helpers');
+const moment = require('moment');
+const PostgresHelpers = require('./app/libs/postgres_helpers');
+diaries_helpers = new DiariesHelpers();
+await diaries_helpers.init();
+categories_helpers = new CategoriesHelpers();
+await categories_helpers.init();
+const CategoriesGenerate = require('./app/libs/categories_generate.js');
+const DiariesGenerate = require('./app/libs/diaries_generate.js');
+
+const JwtService = require('./app/libs/jwt_service.js');
+const variables = require('./app/libs/variables');
+
+PostgresHelpers.getByQuery({ table_name: 'diaries', limit: 10, offset: 0 })
+await categories_helpers.getByQuery({ limit: 3, offset: 0 })
+await diaries_helpers.getByQuery({ limit: 3, offset: 0 })
+
+const randomCrypto = require('./app/libs/random_crypto.js');
+
+
+const path = require('path');
+require('dotenv').config({ path: path.join(process.cwd(), '.env.local') });
+let diaries_helpers = null;
+const DiariesHelpers = require('./app/libs/diaries_helpers');
+diaries_helpers = new DiariesHelpers();
+await diaries_helpers.init();
+await diaries_helpers.getById(1);
+
+let privateKey = await fs.readFileSync(path.join(configFolder, 'private.key.server'), 'utf8');
+let publicKey = await fs.readFileSync(path.join(configFolder, 'public.key.server'), 'utf8');
+privateKey = await randomCrypto.encrypt(privateKey);
+publicKey = await randomCrypto.encrypt(publicKey);
