@@ -175,6 +175,7 @@ class PostgresHelpers {
     const isArray = Array.isArray(obj);
     debug('insert', table_name, obj);
     const code = this.validateInsert(isArray, obj);
+    debug('insert: code', code, obj);
     if (code)
       return { code };
 
@@ -182,7 +183,10 @@ class PostgresHelpers {
       $table: table_name, $documents: obj
     });
 
+    debug('insert: insert_command', insert_command);
+
     const cmd = insert_command.sql;
+    debug('insert: cmd', cmd);
     return this.query(isArray ? cmd : `${cmd} returning *;`, insert_command.values);
   }
 

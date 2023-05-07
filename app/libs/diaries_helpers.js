@@ -7,12 +7,9 @@ const { buildQueryDateRange, buildQueryMoneyRange, } = require('./helpers');
 
 const buildCategoriesAndReasonFields = (category_ids, reason) => {
   const query = {};
-  if (category_ids.length > 0) {
-    if (category_ids.length > 1)
-      query.category_id = { '$in': category_ids };
-    else
-      query.category_id = { '$eq': category_ids[0] };
-  }
+  
+  if (Array.isArray(category_ids) && category_ids.length > 0)
+    query['$or'] = category_ids.map(id => ` (${id} = ANY(category_ids)) `);
 
   if (reason && reason.length > 1)
     query.reason = { '$like': `%${reason}%`, };
@@ -21,8 +18,10 @@ const buildCategoriesAndReasonFields = (category_ids, reason) => {
 
 const extractFields = (diary = {}) => {
   diary = diary || {};
-  const { reason = '', money = 0, created_at = new Date(), category_id = 0 } = diary;
-  return { reason, money, created_at, category_id, };
+  let { reason = '', money = 0, created_at = new Date(), category_ids = [] } = diary;
+  if (category_ids.length > 0)
+  category_ids = `{${category_ids.join(', ')}}`
+  return { reason, money, created_at, category_ids, };
 };
 
 class DiariesHelpers extends BaseHelpers {
@@ -30,7 +29,7 @@ class DiariesHelpers extends BaseHelpers {
     super();
     this.table_name = 'diaries';
     this.model_name = 'Diary';
-    this.requiredFields = ['reason', 'money', 'category_id'];
+    this.requiredFields = ['reason', 'money',];
   }
 
   buildSearchQueries(options) {

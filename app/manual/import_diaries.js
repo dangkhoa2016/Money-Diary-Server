@@ -19,7 +19,7 @@ class ImportJson {
     await client.init();
 
     return Promise.map(_chunk(arr, this.batch_size), async chunk => {
-      const documents = chunk.map(json => (_pick(json, ['reason', 'money', 'created_at', 'updated_at', 'category_id'])));
+      const documents = chunk.map(json => (_pick(json, ['reason', 'money', 'created_at', 'updated_at', 'category_ids'])));
       // debug('documents', documents);
       const result = await client.insert(table_name, documents);
       debug('bulk insert result', result);

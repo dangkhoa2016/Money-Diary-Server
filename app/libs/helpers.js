@@ -181,9 +181,11 @@ const getRandomDates = (num, min_date, max_date) => {
   const formatDate = (d) => d.format('DD-MM-YYYY');
   for (let index = 0; index < num; index++) {
     let date = randomDate(min_date, max_date);
-    const fmDate = formatDate(date);
-    while (arr_dates.findIndex(x => formatDate(x) === fmDate) !== -1)
+    let fmDate = formatDate(date);
+    while (arr_dates.findIndex(x => formatDate(x) === fmDate) !== -1) {
       date = randomDate(min_date, max_date);
+      fmDate = formatDate(date);
+    }
     arr_dates.push(date);
   }
   return arr_dates;
