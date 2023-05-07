@@ -7,7 +7,10 @@ const diarySchema = {
   reason: 'string',
   created_at: 'string',
   money: 'number',
-  category_id: 'number',
+  category_ids: {
+    type: 'array',
+    items: { type: 'number' },
+  }
 };
 
 const Promise = require('bluebird');

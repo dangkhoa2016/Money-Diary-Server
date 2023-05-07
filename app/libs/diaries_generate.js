@@ -31,7 +31,7 @@ class DiariesGenerate {
         created_at: randomDate(start_date, end_date).toDate(),
         reason: faker.lorem.sentence(),
         money: random_money(100, 1000, 0),
-        category_id: this.categories[Math.floor(Math.random() * this.categories.length)].id
+        category_ids: `{${faker.helpers.arrayElements(this.categories, faker.mersenne.rand(4, 1)).map(c => c.id).join(', ')}}`
       });
     }
 
