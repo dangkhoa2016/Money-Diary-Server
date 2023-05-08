@@ -7,12 +7,12 @@ const { buildQueryDateRange, buildQueryMoneyRange, } = require('./helpers');
 
 const buildCategoriesAndReasonFields = (category_ids, reason) => {
   const query = {};
-  
+
   if (Array.isArray(category_ids) && category_ids.length > 0)
     query['$or'] = category_ids.map(id => ` (${id} = ANY(category_ids)) `);
 
   if (reason && reason.length > 1)
-    query.reason = { '$like': `%${reason}%`, };
+    query.reason = { '$ilike': `%${reason}%`, };
   return query;
 };
 
@@ -20,7 +20,7 @@ const extractFields = (diary = {}) => {
   diary = diary || {};
   let { reason = '', money = 0, created_at = new Date(), category_ids = [] } = diary;
   if (category_ids.length > 0)
-  category_ids = `{${category_ids.join(', ')}}`
+    category_ids = `{${category_ids.join(', ')}}`
   return { reason, money, created_at, category_ids, };
 };
 
@@ -37,14 +37,18 @@ class DiariesHelpers extends BaseHelpers {
     const { from_date, to_date, from_money = 0, to_money = 0, reason = '', } = options;
 
     let category_ids = options.category_ids || [];
-    const temp_category_ids = options['category_ids[]'] || [];
+    // debug('category_ids', category_ids);
+    const temp_category_ids = options['category_ids[]'] || options['category_ids^%^5B^%^5D'] || [];
+    // debug('temp_category_ids', temp_category_ids);
     category_ids = Array.from(new Set([...category_ids, ...temp_category_ids]));
     category_ids = category_ids.filter(c => c).map(id => Number(id)).filter(c => c);
+    // debug('category_ids', category_ids);
 
     const query = { ...(buildQueryDateRange(from_date, to_date) || {}), ...(buildQueryMoneyRange(from_money, to_money) || {}) };
     debug('buildSearchQueries', query, this.model_name);
-
-    return { ...query, ...buildCategoriesAndReasonFields(category_ids, reason) };
+    const query1 = Object.entries(query).map(field => ({ [field[0]]: field[1] }));
+    const query2 = Object.entries(buildCategoriesAndReasonFields(category_ids, reason)).map(field => ({ [field[0]]: field[1] }));
+    return { '$and': [...query1, ...query2] };
   }
 
   async search(options = {}) {

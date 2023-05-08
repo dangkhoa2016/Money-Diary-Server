@@ -8,9 +8,9 @@ const diarySchema = {
   created_at: 'string',
   money: 'number',
   category_ids: {
-    type: 'array',
-    items: { type: 'number' },
-  }
+    type: ['null', 'array'],
+    items: { type: ['string', 'integer'] },
+  },
 };
 
 const Promise = require('bluebird');
@@ -31,7 +31,7 @@ const searchQuerySchema = {
     show_total: { type: 'boolean' },
     category_ids: {
       type: ['null', 'array'],
-      items: { type: ['string', 'number'] },
+      items: { type: ['string', 'integer'] },
     },
   },
 };

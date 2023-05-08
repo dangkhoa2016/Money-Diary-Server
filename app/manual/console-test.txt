@@ -35,3 +35,17 @@ let privateKey = await fs.readFileSync(path.join(configFolder, 'private.key.serv
 let publicKey = await fs.readFileSync(path.join(configFolder, 'public.key.server'), 'utf8');
 privateKey = await randomCrypto.encrypt(privateKey);
 publicKey = await randomCrypto.encrypt(publicKey);
+
+
+var customQuery = sql.$select({
+    '*': true,
+    $from: 'diaries',
+    $where: {
+      $and: [
+        {"created_at":{"$between":{"$min":"2023-04-30 17:00:00.0000","$max":"2023-05-31 16:59:59.9990"}}},
+        {"$or":[" (8 = ANY(category_ids)) "," (1 = ANY(category_ids)) "]}
+      ]
+    }
+});
+
+const helpers = require('./app/libs/helpers');

@@ -48,7 +48,7 @@ class CategoriesHelpers extends BaseHelpers {
 
     if (name && name.length > 1) {
       query.name = {
-        '$like': `%${name}%`,
+        '$ilike': `%${name}%`,
       }
     }
 
