@@ -32,17 +32,18 @@ class DiariesHelpers extends BaseHelpers {
     this.requiredFields = ['reason', 'money',];
   }
 
+  getArray(field) {
+    field = Array.from(new Set([...[field]])).flat();
+    return field.map(id => Number(id)).filter(c => c);
+  }
+
   buildSearchQueries(options) {
     options = options || {};
     const { from_date, to_date, from_money = 0, to_money = 0, reason = '', } = options;
 
-    let category_ids = options.category_ids || [];
-    // debug('category_ids', category_ids);
-    const temp_category_ids = options['category_ids[]'] || options['category_ids^%^5B^%^5D'] || [];
-    // debug('temp_category_ids', temp_category_ids);
-    category_ids = Array.from(new Set([...category_ids, ...temp_category_ids]));
-    category_ids = category_ids.filter(c => c).map(id => Number(id)).filter(c => c);
-    // debug('category_ids', category_ids);
+    let category_ids = this.getArray(options.category_ids);
+    const temp_category_ids = this.getArray(options['category_ids[]'] || options['category_ids^%^5B^%^5D'] || []);
+    category_ids = Array.from(new Set([...category_ids, ...temp_category_ids])).flat();
 
     const query = { ...(buildQueryDateRange(from_date, to_date) || {}), ...(buildQueryMoneyRange(from_money, to_money) || {}) };
     debug('buildSearchQueries', query, this.model_name);
