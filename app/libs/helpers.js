@@ -260,7 +260,10 @@ const getSchema = (definedFields = {}) => {
   definedFields = definedFields || {};
 
   for (const field of Object.keys(definedFields)) {
-    obj[field] = { type: definedFields[field] };
+    if (typeof definedFields[field] === 'string')
+      obj[field] = { type: definedFields[field] };
+    else
+      obj[field] = definedFields[field];
   }
 
   return obj;
